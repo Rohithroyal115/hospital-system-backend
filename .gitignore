@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environment (YOUR CASE)
+project/
+
+# Django
+db.sqlite3
+staticfiles/
+
+# OS
+.DS_Store
+Thumbs.db
