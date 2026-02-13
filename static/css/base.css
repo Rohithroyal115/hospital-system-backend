@@ -1,0 +1,141 @@
+/* Global */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: white;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 50px;
+    background: rgba(0,0,0,0.3);
+}
+
+.nav-logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.nav-links a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+}
+
+.nav-links a:hover {
+    color: #1cc88a;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    opacity: 0.8;
+}
+
+/* Auth Container */
+.auth-container {
+    height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Card */
+.auth-card {
+    background: white;
+    color: black;
+    padding: 40px;
+    width: 380px;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Titles */
+.auth-card h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* Form */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+/* Button */
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #4e73df;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background: #2e59d9;
+    transform: translateY(-2px);
+}
+
+/* Links */
+.auth-links {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.auth-links a {
+    text-decoration: none;
+    color: #4e73df;
+    font-size: 14px;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+/* Messages */
+.error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.success-message {
+    background: #d4edda;
+    color: #155724;
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-15px); }
+    to { opacity: 1; transform: translateY(0); }
+}

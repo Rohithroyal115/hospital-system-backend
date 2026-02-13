@@ -1,0 +1,130 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+    color: #333;
+}
+
+/* NAVBAR */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    color: white;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.nav-links a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+}
+
+.primary-btn {
+    background: white;
+    color: #764ba2;
+    padding: 8px 15px;
+    border-radius: 20px;
+}
+
+.logout-btn {
+    color: #ffdddd;
+}
+
+.user-badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+/* MAIN */
+
+.main-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 50px auto;
+}
+
+/* CARD */
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    margin-bottom: 30px;
+}
+
+/* TABLE */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #764ba2;
+    color: white;
+    padding: 12px;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+    background: #f4f4f4;
+}
+
+/* BUTTONS */
+
+button, .btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.btn-danger {
+    background: #ff4d4d;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #5563c1;
+}
+
+.btn-danger:hover {
+    background: #cc0000;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: white;
+    margin-top: 50px;
+}

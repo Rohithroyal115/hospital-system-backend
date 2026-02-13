@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+
+<style>
+.dashboard-container {
+    max-width: 1300px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.dashboard-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-title {
+    font-size: 14px;
+    color: gray;
+}
+
+.stat-value {
+    font-size: 26px;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+.queue-section {
+    margin-top: 50px;
+}
+
+.queue-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.queue-table th,
+.queue-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.queue-table th {
+    background: #f8f9fc;
+}
+
+.override-form input {
+    width: 70px;
+    padding: 5px;
+}
+
+.override-form button {
+    padding: 6px 10px;
+    border: none;
+    background: #4e73df;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.override-form button:hover {
+    background: #2e59d9;
+}
+</style>
+
+<div class="dashboard-container">
+
+    <div class="dashboard-title">
+        📊 Admin Analytics Dashboard
+    </div>
+
+    <!-- ================= STATS ================= -->
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-title">Total Users</div>
+            <div class="stat-value">{{ total_users }}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Total Doctors</div>
+            <div class="stat-value">{{ total_doctors }}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Total Patients</div>
+            <div class="stat-value">{{ total_patients }}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Total Appointments</div>
+            <div class="stat-value">{{ total_appointments }}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Total Cancellations</div>
+            <div class="stat-value">{{ total_cancelled }}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Online Users</div>
+            <div class="stat-value">{{ online_users }}</div>
+        </div>
+
+    </div>
+
+    <!-- ================= QUEUE SECTION ================= -->
+    <div class="queue-section">
+        <h3>🧠 Live Queue Management</h3>
+
+        {% if queue_entries %}
+        <table class="queue-table">
+            <thead>
+                <tr>
+                    <th>Doctor</th>
+                    <th>Patient</th>
+                    <th>Slot</th>
+                    <th>Priority</th>
+                    <th>Override</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in queue_entries %}
+                <tr>
+                    <td>{{ entry.slot.doctor }}</td>
+                    <td>{{ entry.patient.username }}</td>
+                    <td>{{ entry.slot.date }} {{ entry.slot.start_time }}</td>
+                    <td>{{ entry.priority_score }}</td>
+                    <td>
+                        <form method="post" action="{% url 'override_priority' entry.id %}" class="override-form">
+                            {% csrf_token %}
+                            <input type="number" name="priority" required>
+                            <button type="submit">Update</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p>No active queue entries.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

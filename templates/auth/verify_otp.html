@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP | MediCare+</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+</head>
+<body>
+
+<div class="auth-container">
+    <div class="auth-card">
+        <h2 class="auth-title">🔐 Verify OTP</h2>
+        <p class="auth-subtitle">
+            Enter the 6-digit code sent to your email
+        </p>
+
+        {% for message in messages %}
+            <div class="toast error-toast">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <!-- ===================== -->
+        <!-- VERIFY OTP FORM -->
+        <!-- ===================== -->
+        <form method="post" id="otp-form">
+            {% csrf_token %}
+
+            <div class="otp-container">
+                <input type="text" maxlength="1" class="otp-box" autofocus>
+                <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
+            </div>
+
+            <input type="hidden" name="otp" id="full-otp">
+
+            <button type="submit" class="auth-button" style="margin-top:20px;">
+                ✓ Verify OTP
+            </button>
+        </form>
+
+        <!-- ===================== -->
+        <!-- RESEND OTP BUTTON -->
+        <!-- ===================== -->
+        <form method="post" action="{% url 'resend_otp' %}" style="margin-top: 15px;">
+            {% csrf_token %}
+            <button type="submit" class="auth-button" style="background:#6c757d;">
+                🔄 Resend OTP
+            </button>
+        </form>
+
+        <!-- ===================== -->
+        <!-- BACK TO LOGIN -->
+        <!-- ===================== -->
+        <div class="auth-link" style="margin-top: 1.5rem;">
+            <a href="{% url 'login' %}">← Back to Login</a>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const boxes = document.querySelectorAll(".otp-box");
+const fullOtp = document.getElementById("full-otp");
+
+boxes.forEach((box, index) => {
+
+    box.addEventListener("input", () => {
+        if (box.value.length === 1 && index < boxes.length - 1) {
+            boxes[index + 1].focus();
+        }
+        fullOtp.value = Array.from(boxes).map(b => b.value).join("");
+    });
+
+    box.addEventListener("keydown", (e) => {
+        if (e.key === "Backspace" && !box.value && index > 0) {
+            boxes[index - 1].focus();
+        }
+    });
+
+    box.addEventListener("paste", (e) => {
+        e.preventDefault();
+        const paste = e.clipboardData.getData("text");
+        const digits = paste.replace(/\D/g, "").split("");
+
+        digits.forEach((digit, i) => {
+            if (boxes[i]) {
+                boxes[i].value = digit;
+            }
+        });
+
+        fullOtp.value = Array.from(boxes).map(b => b.value).join("");
+
+        if (digits.length >= 6) {
+            boxes[5].focus();
+        }
+    });
+});
+</script>
+
+</body>
+</html>

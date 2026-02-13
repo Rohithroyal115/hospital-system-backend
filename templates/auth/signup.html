@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Patient Signup | MediCare+{% endblock %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>✨ Create Your Account</h2>
+        <p class="auth-subtitle">Join MediCare+ for easy appointment booking</p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="error-message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- Username -->
+            <div class="form-group">
+                <label>Username *</label>
+                <input type="text"
+                       name="username"
+                       placeholder="Choose a username"
+                       required
+                       autofocus>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email"
+                       name="email"
+                       placeholder="your.email@example.com"
+                       required>
+            </div>
+
+            <!-- Phone -->
+            <div class="form-group">
+                <label>Phone Number *</label>
+                <input type="text"
+                       name="phone"
+                       placeholder="+91 XXXXX XXXXX"
+                       pattern="[0-9+ ]{10,15}"
+                       required>
+            </div>
+
+            <!-- Age -->
+            <div class="form-group">
+                <label>Age *</label>
+                <input type="number"
+                       name="age"
+                       placeholder="Enter your age"
+                       min="1"
+                       max="120"
+                       required>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label>Password *</label>
+                <input type="password"
+                       name="password"
+                       placeholder="Create a strong password"
+                       minlength="6"
+                       required>
+            </div>
+
+            <button type="submit" class="auth-button">
+                Create Account
+            </button>
+        </form>
+
+        <p style="text-align:center; margin-top:1.5rem; color: var(--gray);">
+            Already have an account?
+            <a href="/login/" style="color: var(--primary); font-weight: 600;">
+                Login here
+            </a>
+        </p>
+
+        <div class="auth-links">
+            <a href="/">← Back to Home</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

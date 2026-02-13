@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Available Slots | MediCare+{% endblock %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<h2 class="page-title">📋 Available Time Slots</h2>
+
+<div class="card">
+    {% if slots %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>📅 Date</th>
+                <th>🕐 Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for slot in slots %}
+            <tr>
+                <td>{{ slot.date }}</td>
+                <td><strong>{{ slot.start_time }}</strong></td>
+                <td>
+                    <form method="post" action="/api/appointments/book/">
+                        {% csrf_token %}
+                        <input type="hidden" name="slot_id" value="{{ slot.id }}">
+                        <button class="btn-primary">📌 Book Appointment</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>😔 No available slots for this doctor at the moment.</p>
+    {% endif %}
+
+    <div style="margin-top: 2rem; text-align: center;">
+        <a href="/patient/dashboard/" class="btn-secondary">← Back to Dashboard</a>
+    </div>
+</div>
+
+{% endblock %}

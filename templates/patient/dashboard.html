@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Patient Dashboard | MediCare+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<h2 class="page-title">👤 My Health Dashboard</h2>
+
+
+<!-- ===================== -->
+<!-- MY APPOINTMENTS -->
+<!-- ===================== -->
+
+<div class="card">
+    <h2>📅 My Appointments</h2>
+
+    {% if appointments %}
+    <table>
+        <thead>
+            <tr>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appt in appointments %}
+            <tr>
+                <td>Dr. {{ appt.doctor.user.username }}</td>
+                <td>{{ appt.slot.date }}</td>
+                <td>{{ appt.slot.start_time }}</td>
+                <td>
+                    {% if appt.status == "BOOKED" %}
+                        <span style="color: orange; font-weight:600;">⏳ BOOKED</span>
+                    {% elif appt.status == "COMPLETED" %}
+                        <span style="color: green; font-weight:600;">✓ COMPLETED</span>
+                    {% elif appt.status == "CANCELLED" %}
+                        <span style="color: red; font-weight:600;">✗ CANCELLED</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if appt.status == "BOOKED" %}
+                    <form method="post" action="/api/appointments/cancel/{{ appt.id }}/">
+                        {% csrf_token %}
+                        <button class="btn-danger">Cancel</button>
+                    </form>
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>📭 You haven't booked any appointments yet.</p>
+    {% endif %}
+</div>
+
+
+
+<!-- ===================== -->
+<!-- WAITING QUEUE -->
+<!-- ===================== -->
+
+<div class="card">
+    <h2>📊 My Waiting Queue</h2>
+
+    {% if queue_data %}
+    <table>
+        <thead>
+            <tr>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Your Priority</th>
+                <th>Your Position</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in queue_data %}
+            <tr>
+                <td>Dr. {{ item.doctor.user.username }}</td>
+                <td>{{ item.date }}</td>
+                <td>{{ item.time }}</td>
+                <td>{{ item.priority }}</td>
+                <td>
+                    <strong style="color: blue;">
+                        #{{ item.position }}
+                    </strong>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>📭 You are not in any waiting queue.</p>
+    {% endif %}
+</div>
+
+
+
+<!-- ===================== -->
+<!-- SEARCH DOCTOR -->
+<!-- ===================== -->
+
+<div class="card">
+    <h2>🔍 Search Doctor by Specialization</h2>
+
+    <form method="get" style="display:flex; gap:10px;">
+        <input type="text"
+               name="search"
+               placeholder="Enter specialization (e.g. Cardiology)"
+               value="{{ search_query }}"
+               style="flex:1; padding:8px;">
+        <button class="btn-primary">Search</button>
+    </form>
+</div>
+
+
+
+<!-- ===================== -->
+<!-- AVAILABLE DOCTORS -->
+<!-- ===================== -->
+
+<div class="card">
+    <h2>👨‍⚕️ Doctors Available Today</h2>
+
+    {% if available_doctors %}
+    <table>
+        <thead>
+            <tr>
+                <th>Doctor Name</th>
+                <th>Specialization</th>
+                <th>Available Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for doctor in available_doctors %}
+            <tr>
+                <td><strong>Dr. {{ doctor.user.username }}</strong></td>
+                <td style="color: blue;">{{ doctor.specialization }}</td>
+                <td>
+                    {{ doctor.available_from }} — {{ doctor.available_to }}
+                </td>
+                <td>
+                    <a href="/patient/doctor/{{ doctor.id }}/slots/" class="btn-primary">
+                        View Slots
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>😔 No doctors available today.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

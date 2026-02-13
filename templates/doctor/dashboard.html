@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Doctor Dashboard | MediCare+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<h2 class="page-title">🩺 Doctor Dashboard</h2>
+
+<div class="card">
+    <h2>👨‍⚕️ Availability Status</h2>
+
+    <form method="post" action="/doctor/toggle-availability/">
+        {% csrf_token %}
+        {% if doctor.is_available %}
+            <p style="color: var(--success); font-weight: 600; text-align: center; margin-bottom: 1rem;">
+                ✅ You are currently ONLINE
+            </p>
+            <button class="btn-danger">🔴 Go Offline</button>
+        {% else %}
+            <p style="color: var(--gray); font-weight: 600; text-align: center; margin-bottom: 1rem;">
+                ⚪ You are currently OFFLINE
+            </p>
+            <button class="btn-primary">🟢 Go Online</button>
+        {% endif %}
+    </form>
+</div>
+
+
+<div class="card">
+    <h2>📋 Booked Appointments</h2>
+
+    {% if appointments %}
+    <table>
+        <thead>
+            <tr>
+                <th>Patient Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appt in appointments %}
+            <tr>
+                <td>{{ appt.patient.username }}</td>
+                <td>{{ appt.slot.date }}</td>
+                <td>{{ appt.slot.start_time }}</td>
+                <td>
+                    {% if appt.status == "BOOKED" %}
+                        <span style="color: var(--warning); font-weight: 600;">⏳ {{ appt.status }}</span>
+                    {% elif appt.status == "COMPLETED" %}
+                        <span style="color: var(--success); font-weight: 600;">✓ {{ appt.status }}</span>
+                    {% else %}
+                        <span style="color: var(--gray);">{{ appt.status }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if appt.status == "BOOKED" %}
+                    <form method="post" action="/doctor/complete/{{ appt.id }}/">
+                        {% csrf_token %}
+                        <button class="btn-primary">✓ Mark Completed</button>
+                    </form>
+                    {% else %}
+                    <span style="color: var(--success); font-weight: 600;">✓ Completed</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>📭 No appointments scheduled yet.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

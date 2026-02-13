@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MediCare+{% endblock %}</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+    <div class="nav-right">
+
+        <a href="/">Home</a>
+
+        {% if user.is_authenticated %}
+
+            {% if user.is_patient %}
+                <a href="{% url 'patient_dashboard' %}">Dashboard</a>
+
+            {% elif user.is_doctor %}
+                <a href="/doctor/dashboard/">Dashboard</a>
+
+            {% elif user.is_admin_user %}
+                <a href="/admin/">Admin Panel</a>
+            {% endif %}
+
+            <span class="user-status">
+                🟢 {{ user.username }}
+            </span>
+
+            <a href="{% url 'logout' %}" class="logout-btn">
+                Logout
+            </a>
+
+        {% else %}
+
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'signup' %}">Create Account</a>
+
+        {% endif %}
+
+    </div>
+</nav>
+
+
+<!-- ================= MAIN CONTENT ================= -->
+<div class="main-content">
+    {% block content %}{% endblock %}
+</div>
+
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+    <p>© 2024 MediCare+ | Smart Priority Based Hospital System</p>
+</footer>
+
+</body>
+</html>

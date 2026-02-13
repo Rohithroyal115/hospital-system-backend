@@ -1,14 +1,38 @@
+# ======================
 # Python
+# ======================
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
 
-# Virtual environment (YOUR CASE)
+# ======================
+# Virtual Environments
+# ======================
 project/
+venv/
+env/
+.venv/
 
+# ======================
 # Django
+# ======================
 db.sqlite3
 staticfiles/
 
-# OS
+# ======================
+# Environment variables
+# ======================
+.env
+
+# ======================
+# IDE / Editor
+# ======================
+.vscode/
+.idea/
+
+# ======================
+# OS files
+# ======================
 .DS_Store
 Thumbs.db

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Welcome to MediCare+ | Book Your Hospital Appointment{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>🏥 Book Your Hospital Appointment</h1>
+    <p>Fast • Secure • Priority-based Scheduling</p>
+
+    <div class="cta-buttons">
+
+        {% if user.is_authenticated %}
+
+            {% if user.is_patient %}
+                <a href="{% url 'patient_dashboard' %}" class="btn-primary">
+                    📋 Go to Dashboard
+                </a>
+
+            {% elif user.is_doctor %}
+                <a href="/doctor/dashboard/" class="btn-primary">
+                    🩺 Doctor Dashboard
+                </a>
+
+            {% elif user.is_admin_user %}
+                <a href="{% url 'admin_dashboard' %}" class="btn-primary">
+                    ⚙ Admin Dashboard
+                </a>
+            {% endif %}
+
+        {% else %}
+
+            <a href="{% url 'login' %}" class="btn-primary">
+                👤 Patient Login
+            </a>
+
+            <a href="{% url 'signup' %}" class="btn-secondary">
+                ✨ Create Account
+            </a>
+
+            <a href="/doctor/login/" class="btn-outline">
+                🩺 Doctor Login
+            </a>
+
+        {% endif %}
+
+    </div>
+</div>
+
+<style>
+    .hero {
+        padding: 8rem 2rem;
+        text-align: center;
+    }
+
+    .cta-buttons {
+        margin-top: 2rem;
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+</style>
+{% endblock %}
