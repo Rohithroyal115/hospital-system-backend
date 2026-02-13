@@ -8,12 +8,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 # ======================================================
 
-SECRET_KEY = os.environ.get(
-    "SECRET_KEY",
-    "django-insecure-dev-key"
-)
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
-DEBUG = os.environ.get("DEBUG", "True") == "True"
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
     ".onrender.com",
@@ -69,11 +66,9 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "django.template.context_processors.static",
             ],
         },
     },
@@ -82,26 +77,16 @@ TEMPLATES = [
 WSGI_APPLICATION = "hospital_system.wsgi.application"
 
 # ======================================================
-# DATABASE CONFIGURATION
+# DATABASE
 # ======================================================
 
-if DEBUG:
-    # Local development → SQLite
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
-else:
-    # Production → PostgreSQL (Render)
-    DATABASES = {
-        "default": dj_database_url.config(
-            default=os.environ.get("DATABASE_URL"),
-            conn_max_age=600,
-            ssl_require=True,
-        )
-    }
+DATABASES = {
+    "default": dj_database_url.config(
+        default=os.environ.get("DATABASE_URL"),
+        conn_max_age=600,
+        ssl_require=not DEBUG,
+    )
+}
 
 # ======================================================
 # INTERNATIONALIZATION
@@ -109,24 +94,21 @@ else:
 
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Asia/Kolkata"
-
 USE_I18N = True
 USE_TZ = True
 
 # ======================================================
-# STATIC FILES
+# STATIC FILES (IMPORTANT FOR CSS FIX)
 # ======================================================
 
 STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
-if not DEBUG:
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # ======================================================
 # AUTH
@@ -136,16 +118,15 @@ AUTH_USER_MODEL = "accounts.User"
 LOGIN_URL = "/login/"
 
 # ======================================================
-# EMAIL CONFIGURATION
+# EMAIL
 # ======================================================
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = "medcare125@gmail.com"
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
